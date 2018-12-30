@@ -1,0 +1,41 @@
+#dependencies
+packages/
+ipch/
+.vs/
+*.proto
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+*.opendb
+*.db
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+#log
+*.log
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Project
+*.exe
+*.cs
