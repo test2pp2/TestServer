@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{f4c96fc3-f505-488f-a72b-929a476a89e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sql">
+      <UniqueIdentifier>{2aa75633-1813-44ca-a17e-c13d716a74ee}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Query.hpp">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SqlConnector.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SqlConnector.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
