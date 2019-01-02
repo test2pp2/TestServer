@@ -10,7 +10,7 @@ template <typename T>
 class Server : public std::enable_shared_from_this<Server<T>> {
 public:
 
-  Server(boost::asio::io_context& ioc, tcp::endpoint endpoint);
+  Server(boost::asio::io_context& io_context, tcp::endpoint endpoint);
   ~Server();
 
   void Run();
@@ -22,7 +22,7 @@ private:
   tcp::socket socket_;
 
   //std::map<const Session<T>*, std::shared_ptr<Session<T>>> sessions_;
-
+  boost::asio::io_context& io_context_;
   std::mutex mutex_;
 };
 

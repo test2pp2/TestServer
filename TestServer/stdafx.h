@@ -24,6 +24,7 @@
 #include <thread>
 #include <vector>
 #include <mutex>
+#include <csignal>
 #include "Utils/json11.hpp"
 
 using tcp = boost::asio::ip::tcp;

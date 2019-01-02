@@ -5,9 +5,10 @@
 namespace Network {
   
 template<typename T>
-Server<T>::Server(boost::asio::io_context& ioc, tcp::endpoint endpoint) :
-  acceptor_(ioc),
-  socket_(ioc) {
+Server<T>::Server(boost::asio::io_context& io_context, tcp::endpoint endpoint) :
+  acceptor_(io_context),
+  socket_(io_context),
+  io_context_(io_context) {
 
   boost::system::error_code ec;
   acceptor_.open(endpoint.protocol(), ec);

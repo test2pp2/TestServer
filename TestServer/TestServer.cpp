@@ -7,7 +7,9 @@
 #include "Contents/Packet.h"
 #include "Database/SqlConnector.h"
 
-//#pragma comment(lib,"Advapi32")
+std::mutex lock;
+std::condition_variable cv;
+std::atomic_bool stop = false;
 
 bool CreateSqlConnection(
   const std::string& hostname, 
@@ -37,8 +39,21 @@ void InitalizeThreadLocal() {
   std::cout << "successfully connect to sql server" << std::endl;
 }
 
+//#define UNUSED_REFERENCE_PARAMETER(x) boost::ignore_unused(x)
+
+void SignalCallback(int value) {
+  boost::ignore_unused(value);
+  stop = true;
+  cv.notify_all();
+}
+
 int main() {
   setlocale(LC_ALL, "");
+  std::locale::global(std::locale(""));
+  std::wcout.imbue(std::locale(""));
+
+  // 서버 종료 ctrl + break
+  std::signal(SIGBREAK, SignalCallback);
 
   const auto address = boost::asio::ip::make_address("127.0.0.1");
   const unsigned short port = 3006;
@@ -46,25 +61,34 @@ int main() {
 
   Contents::RegisterCallback();
 
-  boost::asio::io_context ioc{ thread_count };
-  auto server = std::make_shared<Network::Server<Contents::Session>>(ioc, boost::asio::ip::tcp::endpoint{ address, port });
+  boost::asio::io_context io_context{ thread_count };
+  auto server = std::make_shared<Network::Server<Contents::Session>>(io_context, boost::asio::ip::tcp::endpoint{ address, port });
   server->Run();
 
-  std::vector<std::thread> v;
-  v.reserve(thread_count);
+  std::vector<std::thread> thread_pool;
+  thread_pool.reserve(thread_count);
   for (auto i = 0; i < thread_count; ++i)
-    v.emplace_back(
-      [&ioc] {
+    thread_pool.emplace_back(
+      [&io_context] {
     InitalizeThreadLocal();
     std::cout << "run!" << std::endl;
-    ioc.run();
+    io_context.run();
   });
 
-  std::cout << "complete run" << std::endl;
-  getchar();
-  std::cout << "end run" << std::endl;
-  //ioc.run();
-  
-  getchar();
+  std::unique_lock<std::mutex> lock_guard(lock);
+  cv.wait(lock_guard, [] {
+    if (!stop) {
+      wprintf(L"메인 스레드 대기\n");
+      return false;
+    }
+    wprintf(L"서버 종료 알림\n");
+    return true;
+  });
+
+  io_context.stop();
+  for (auto& worker_thread : thread_pool) {
+    worker_thread.join();
+  }
+
   return EXIT_SUCCESS;
 }
