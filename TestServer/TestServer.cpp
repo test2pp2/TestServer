@@ -6,6 +6,7 @@
 #include "Contents/Session.h"
 #include "Contents/Packet.h"
 #include "Database/SqlConnector.h"
+#include "Utils/Minidump.h"
 
 std::mutex lock;
 std::condition_variable cv;
@@ -47,7 +48,15 @@ void SignalCallback(int value) {
   cv.notify_all();
 }
 
+class MyObject {
+public:
+  bool mIsOpened = true;
+};
+
 int main() {
+  Utils::Minidump dump;
+  dump.Start();
+
   setlocale(LC_ALL, "");
   std::locale::global(std::locale(""));
   std::wcout.imbue(std::locale(""));
@@ -56,7 +65,7 @@ int main() {
   std::signal(SIGBREAK, SignalCallback);
 
   const auto address = boost::asio::ip::make_address("127.0.0.1");
-  const unsigned short port = 3006;
+  const unsigned short port = 3000;
   const auto thread_count = 2;
 
   Contents::RegisterCallback();
@@ -90,5 +99,6 @@ int main() {
     worker_thread.join();
   }
 
+  dump.End();
   return EXIT_SUCCESS;
 }

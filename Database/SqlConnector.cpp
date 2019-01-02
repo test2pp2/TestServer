@@ -7,7 +7,7 @@ static sql::Driver* g_driver = nullptr;
 
 thread_local std::shared_ptr<sql::Connection> local_connection;
 thread_local std::shared_ptr<sql::Statement>  local_statement;
-thread_local std::unique_ptr<sql::ResultSet>  local_res;
+thread_local std::unique_ptr<sql::ResultSet>  local_result_set;
 
 static std::mutex driver_lock;
 
@@ -69,10 +69,11 @@ std::shared_ptr<sql::Statement> statement() {
 
 std::unique_ptr<sql::ResultSet> ExecuteQuery(const std::string& query) {
   try {
-    local_res.reset(local_statement->executeQuery(query));
+    //local_connection->setSchema("test");
+    local_result_set.reset(local_statement->executeQuery(query.c_str()));
     // result가 2개가 있는 쿼리는 따로 처리해야할듯
     while (local_statement->getMoreResults()) {}
-    return std::move(local_res);
+    return std::move(local_result_set);
   } catch (sql::SQLException &e) {
     printf("%s\n", e.what());
     return nullptr;
@@ -81,7 +82,7 @@ std::unique_ptr<sql::ResultSet> ExecuteQuery(const std::string& query) {
 
 void Execute(const std::string& query) {
   try {
-    local_statement->execute(query);
+    local_statement->execute(query.c_str());
   } catch (sql::SQLException &e) {
     printf("%s\n", e.what());
   }
