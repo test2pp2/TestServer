@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 #include "Network/Server.h"
-#include "Contents/Session.h"
-#include "Contents/Packet.h"
+#include "Content/Session.h"
+#include "Content/Packet.h"
 #include "Database/SqlConnector.h"
 #include "Utils/Minidump.h"
 
@@ -142,10 +142,10 @@ int main() {
   const unsigned short port = 3000;
   const auto thread_count = 2;
 
-  Contents::RegisterCallback();
+  Content::RegisterCallback();
 
   boost::asio::io_context io_context{ thread_count };
-  auto server = std::make_shared<Network::Server<Contents::Session>>(io_context, boost::asio::ip::tcp::endpoint{ address, port });
+  auto server = std::make_shared<Network::Server<Content::Session>>(io_context, boost::asio::ip::tcp::endpoint{ address, port });
   server->Run();
 
   std::vector<std::thread> thread_pool;

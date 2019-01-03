@@ -2,7 +2,7 @@
 #include "UserRepository.h"
 #include "Session.h"
 
-namespace Contents {
+namespace Content {
 
 std::shared_ptr<User> User::Create(std::shared_ptr<Session> session, uid uid) {
   return std::make_unique<User>(session, uid);

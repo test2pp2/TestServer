@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5E0B2789-1B19-4933-8E7F-62E462EE6EC5}</ProjectGuid>
+    <ProjectGuid>{8C797BC7-76CB-4F89-B191-82C5067495B6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Contents</RootNamespace>
+    <RootNamespace>Content</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -155,6 +155,9 @@
       <Project>{c0a6eb9c-8d6e-476b-adf3-8132c82b0f84}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\packages\boost.1.68.0.0\build\boost.targets" Condition="Exists('..\packages\boost.1.68.0.0\build\boost.targets')" />
@@ -199,6 +202,7 @@
     <Import Project="..\packages\boost_wave-vc140.1.68.0.0\build\boost_wave-vc140.targets" Condition="Exists('..\packages\boost_wave-vc140.1.68.0.0\build\boost_wave-vc140.targets')" />
     <Import Project="..\packages\boost_wserialization-vc140.1.68.0.0\build\boost_wserialization-vc140.targets" Condition="Exists('..\packages\boost_wserialization-vc140.1.68.0.0\build\boost_wserialization-vc140.targets')" />
     <Import Project="..\packages\boost_zlib-vc140.1.68.0.0\build\boost_zlib-vc140.targets" Condition="Exists('..\packages\boost_zlib-vc140.1.68.0.0\build\boost_zlib-vc140.targets')" />
+    <Import Project="..\packages\boost-vc140.1.68.0.0\build\boost-vc140.targets" Condition="Exists('..\packages\boost-vc140.1.68.0.0\build\boost-vc140.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -246,5 +250,6 @@
     <Error Condition="!Exists('..\packages\boost_wave-vc140.1.68.0.0\build\boost_wave-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_wave-vc140.1.68.0.0\build\boost_wave-vc140.targets'))" />
     <Error Condition="!Exists('..\packages\boost_wserialization-vc140.1.68.0.0\build\boost_wserialization-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_wserialization-vc140.1.68.0.0\build\boost_wserialization-vc140.targets'))" />
     <Error Condition="!Exists('..\packages\boost_zlib-vc140.1.68.0.0\build\boost_zlib-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost_zlib-vc140.1.68.0.0\build\boost_zlib-vc140.targets'))" />
+    <Error Condition="!Exists('..\packages\boost-vc140.1.68.0.0\build\boost-vc140.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\boost-vc140.1.68.0.0\build\boost-vc140.targets'))" />
   </Target>
 </Project>

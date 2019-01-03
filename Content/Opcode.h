@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Contents {
+namespace Content {
 
 enum Opcode {
   LOGIN_REQ = 0,

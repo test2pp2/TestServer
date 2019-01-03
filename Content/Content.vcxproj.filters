@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source">
-      <UniqueIdentifier>{d427059c-5e77-4753-921e-9251b5c9ac9e}</UniqueIdentifier>
+      <UniqueIdentifier>{a53e9417-3012-452a-b902-da6b2b5715f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\PacketHandler">
-      <UniqueIdentifier>{8437b709-9543-4806-990a-96fa63099d57}</UniqueIdentifier>
+      <UniqueIdentifier>{5add81a7-ef26-4522-98ba-ef425eb35ada}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -18,30 +18,24 @@
     <ClInclude Include="stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="UserRepository.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="PacketHandler.h">
-      <Filter>Source\PacketHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Packet.h">
       <Filter>Source\PacketHandler</Filter>
     </ClInclude>
     <ClInclude Include="Opcode.h">
       <Filter>Source\PacketHandler</Filter>
     </ClInclude>
+    <ClInclude Include="Packet.h">
+      <Filter>Source\PacketHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="UserRepository.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="UserRepository.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Session.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="PacketHandler.cpp">
@@ -50,5 +44,14 @@
     <ClCompile Include="Packet.cpp">
       <Filter>Source\PacketHandler</Filter>
     </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="UserRepository.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

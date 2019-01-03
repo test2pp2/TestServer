@@ -2,7 +2,7 @@
 
 #include "Opcode.h"
 
-namespace Contents {
+namespace Content {
 
 class Session;
 

@@ -190,8 +190,8 @@
     <ClCompile Include="TestServer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contents\Contents.vcxproj">
-      <Project>{5e0b2789-1b19-4933-8e7f-62e462ee6ec5}</Project>
+    <ProjectReference Include="..\Content\Content.vcxproj">
+      <Project>{8c797bc7-76cb-4f89-b191-82c5067495b6}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Database\Database.vcxproj">
       <Project>{951848d4-3e10-45be-a031-563f5646d415}</Project>

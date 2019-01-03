@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Contents {
+namespace Content {
 
 //class Session;
 

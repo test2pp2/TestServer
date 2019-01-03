@@ -3,7 +3,7 @@
 #include "Session.h"
 #include "Opcode.h"
 
-namespace Contents {
+namespace Content {
 
 static std::array<HandlerCallback, 1000> registers_ = { nullptr, };
 

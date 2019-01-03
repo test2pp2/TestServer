@@ -2,7 +2,7 @@
 #include "Session.h"
 #include "PacketHandler.h"
 
-namespace Contents {
+namespace Content {
 
 Session::Session(tcp::socket socket) : BaseSession(std::move(socket)), user_(nullptr) {
 }

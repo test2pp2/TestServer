@@ -9,7 +9,7 @@
 
 using namespace Database;
 
-namespace Contents {
+namespace Content {
 
 void LogInReq(std::shared_ptr<Session> session, JsonObject req) {
 
