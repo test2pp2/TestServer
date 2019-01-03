@@ -9,12 +9,6 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio/bind_executor.hpp>
-#include <boost/asio/strand.hpp>
-#include <boost/asio/ip/tcp.hpp>
 #include <algorithm>
 #include <cstdlib>
 #include <functional>
@@ -25,6 +19,27 @@
 #include <vector>
 #include <mutex>
 #include <csignal>
+
+#include <boost/asio/bind_executor.hpp>
+#include <boost/asio/strand.hpp>
+#include <boost/asio/ip/tcp.hpp>
+
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+
+#include <boost/log/trivial.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/sinks/text_ostream_backend.hpp>
+#include <boost/log/attributes/named_scope.hpp>
+
 #include "Utils/json11.hpp"
 
 using tcp = boost::asio::ip::tcp;
