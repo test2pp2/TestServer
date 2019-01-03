@@ -54,6 +54,8 @@ public:
   bool mIsOpened = true;
 };
 
+BOOST_LOG_ATTRIBUTE_KEYWORD(a_channel, "Channel", std::string)
+
 static void InitializeLog() {
   boost::log::add_common_attributes();
   boost::log::core::get()->add_global_attribute("Scope",
@@ -87,26 +89,44 @@ static void InitializeLog() {
 
   /* fs sink */
   auto fsSink = boost::log::add_file_log(
-    boost::log::keywords::file_name = "Log/test_%Y-%m-%d_%H-%M-%S.%N.log",
+    boost::log::keywords::file_name = "Log/Content/A_%Y-%m-%d_%H-%M-%S.%N.log",
     boost::log::keywords::rotation_size = 10 * 1024 * 1024,
     boost::log::keywords::min_free_space = 30 * 1024 * 1024,
-    boost::log::keywords::open_mode = std::ios_base::app);
+    boost::log::keywords::open_mode = std::ios_base::app,
+    boost::log::keywords::filter = a_channel == "A"
+  );
   fsSink->set_formatter(logFmt);
   fsSink->locked_backend()->auto_flush(true);
+
+  auto fsSink2 = boost::log::add_file_log(
+    boost::log::keywords::file_name = "Log/Network/B_%Y-%m-%d_%H-%M-%S.%N.log",
+    boost::log::keywords::rotation_size = 10 * 1024 * 1024,
+    boost::log::keywords::min_free_space = 30 * 1024 * 1024,
+    boost::log::keywords::open_mode = std::ios_base::app,
+    boost::log::keywords::filter  = a_channel == "B"
+  );
+  fsSink2->set_formatter(logFmt);
+  fsSink2->locked_backend()->auto_flush(true);
 }
 
 int main() {
   InitializeLog();
   
   using namespace boost::log::trivial;
-  boost::log::sources::severity_logger<severity_level> lg;
+  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_a(boost::log::keywords::channel = "A");
+  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_b(boost::log::keywords::channel = "B");
+
+  BOOST_LOG_SEV(lg_a, debug) << "Connection a";  
+  BOOST_LOG_SEV(lg_b, debug) << "Connection b";
+
+  /*
   BOOST_LOG_SEV(lg, trace) << "A trace severity message";
   BOOST_LOG_SEV(lg, debug) << "A debug severity message";
   BOOST_LOG_SEV(lg, info) << "An informational severity message";
   BOOST_LOG_SEV(lg, warning) << "A warning severity message";
   BOOST_LOG_SEV(lg, error) << "An error severity message";
   BOOST_LOG_SEV(lg, fatal) << "A fatal severity message";
-
+  */
 
   Utils::Minidump dump;
   dump.Start();
