@@ -23,12 +23,9 @@
 #include <boost/asio/bind_executor.hpp>
 #include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
-
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-
 #include <boost/log/trivial.hpp>
-//#include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/console.hpp>

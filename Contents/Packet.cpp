@@ -12,6 +12,14 @@ using namespace Database;
 namespace Contents {
 
 void LogInReq(std::shared_ptr<Session> session, JsonObject req) {
+
+  using namespace boost::log::trivial;
+  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_a(boost::log::keywords::channel = "A");
+  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_b(boost::log::keywords::channel = "B");
+
+  BOOST_LOG_SEV(lg_a, debug) << "Packet a";
+  BOOST_LOG_SEV(lg_b, debug) << "Packet b";
+
   const std::string req_uid = req["uid"].string_value();
   const std::string name = req["name"].string_value();
   const int32_t age = req["age"].int_value();
