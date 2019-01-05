@@ -39,6 +39,9 @@
     <ClInclude Include="ConstContent.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="LobbyPacket.h">
+      <Filter>Source\PacketHandler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -58,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="User.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyPacket.cpp">
+      <Filter>Source\PacketHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
