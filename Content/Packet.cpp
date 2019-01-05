@@ -2,6 +2,7 @@
 #include "Packet.h"
 #include "PacketHandler.h"
 #include "UserRepository.h"
+#include "User.h"
 #include "Session.h"
 #include "Database/SqlConnector.h"
 #include "Database/Query.hpp"
@@ -12,22 +13,23 @@ using namespace Database;
 namespace Content {
 
 void LogInReq(std::shared_ptr<Session> session, JsonObject req) {
-
-  using namespace boost::log::trivial;
-  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_a(boost::log::keywords::channel = "A");
-  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_b(boost::log::keywords::channel = "B");
-
-  BOOST_LOG_SEV(lg_a, debug) << "Packet a";
-  BOOST_LOG_SEV(lg_b, debug) << "Packet b";
-
+  BOOST_LOG_SEV(LOG_CONTENT, debug) << "called LogInReq";
+  if (session->IsUser()) return;
   const std::string req_uid = req["uid"].string_value();
   const std::string name = req["name"].string_value();
   const int32_t age = req["age"].int_value();
 
   // user_id from db
-  const uid user_id = 1087456;
+  std::random_device rn;
+  std::mt19937_64 random_device(rn());
 
-  auto user = User::Create(session, user_id);
+  //< 2단계. 분포 설정 ( 정수 )
+  const std::uniform_int_distribution<size_t> random_range(0, 10000);
+
+  //< 3단계. 값 추출
+  auto uid = random_range(random_device);
+
+  auto user = User::Create(session, uid);
 
   Json res = Json::object({
     { "result", false },
@@ -49,7 +51,6 @@ void LogInReq(std::shared_ptr<Session> session, JsonObject req) {
   }
 
   while (query_result->next()) {
-   
     std::string result  = query_result->getString("username").c_str();
     auto a = Utils::Utf8ToWstring(result);
     auto b = Utils::StringToWstring(result);
@@ -58,12 +59,11 @@ void LogInReq(std::shared_ptr<Session> session, JsonObject req) {
   }
 
 
-  session->set_user(user.get());
+  //session->set_user(user.get());
 
 
-
-  if (!UserRepository::get().AddUser(user)) {
-    session->set_user(nullptr);
+  if (!UserRepository::Instance().AddUser(uid, user)) {
+    //session->set_user(nullptr);
     session->Send(LOGIN_RES, res);
     return;
   }

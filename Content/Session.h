@@ -19,11 +19,17 @@ public:
   void OnDisconnect() override;
   void OnRecv(const std::string& buffer) override;
 
-  void set_user(User* user);
+  void set_user(std::shared_ptr<User> user);
+  bool IsUser() const {
+    auto user = user_.lock();
+    if (user == nullptr) return false;
+    return true;
+  }
+
 private:
   void Send(const JsonObject& buffer);
 
-  User* user_;
+  std::weak_ptr<User> user_;
 };
 
 }

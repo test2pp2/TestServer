@@ -4,41 +4,26 @@
 
 namespace Content {
 
-std::shared_ptr<User> User::Create(std::shared_ptr<Session> session, uid uid) {
-  return std::make_unique<User>(session, uid);
-}
-
-User::User(std::shared_ptr<Session> session, uid uid) : session_(session), uid_(uid) {
-}
-
-User::~User() {
-}
-
-uid User::get_uid() const {
-  return uid_;
-}
-
-bool UserRepository::AddUser(std::shared_ptr<User> user) {
+bool UserRepository::AddUser(size_t key, std::shared_ptr<User> user) {
   std::lock_guard<std::mutex> lock(lock_);
-  const auto key = user->get_uid();
   const auto it = users_.find(key);
   if (it != users_.end()) {
     return false;
   }
 
   users_[key] = user;
-
+  BOOST_LOG_SEV(LOG_CONTENT, debug) << "Add User size: " << users_.size();
   return true;
 }
 
-bool UserRepository::RemoveUser(std::shared_ptr<User> user) {
+bool UserRepository::RemoveUser(size_t key) {
   std::lock_guard<std::mutex> lock(lock_);
-  const auto key = user->get_uid();
   const auto it = users_.find(key);
   if (it == users_.end()) {
     return false;
   }
   users_.erase(key);
+  BOOST_LOG_SEV(LOG_CONTENT, debug) << "Remove User size: " << users_.size();
   return true;
 }
 

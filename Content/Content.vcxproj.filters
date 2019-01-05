@@ -33,6 +33,12 @@
     <ClInclude Include="UserRepository.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstContent.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -48,6 +54,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="UserRepository.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="User.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

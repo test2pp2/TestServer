@@ -20,6 +20,7 @@
 #include <mutex>
 #include <array>
 #include <functional>
+#include <random>
 
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
@@ -37,8 +38,24 @@
 
 #include "Utils/json11.hpp"
 
-using tcp = boost::asio::ip::tcp;
+#include "ConstContent.h"
+
 namespace websocket = boost::beast::websocket;
+
+using tcp = boost::asio::ip::tcp;
 using JsonObject = json11::Json;
 using namespace json11;
-using uid = size_t;
+using namespace boost::log;
+using namespace boost::log::trivial;
+
+namespace Content {
+
+//static const std::string LogContent = "LogContent";
+
+static sources::severity_channel_logger_mt<trivial::severity_level, std::string> log_content(
+  keywords::channel = LogContent
+);
+
+} // Content
+
+#define LOG_CONTENT Content::log_content

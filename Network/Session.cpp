@@ -8,7 +8,7 @@ BaseSession::BaseSession(tcp::socket socket) : ws_(std::move(socket)), strand_(w
 }
 
 BaseSession::~BaseSession() {
-  std::cout << "dtor BaseSession called" << std::endl;
+  BOOST_LOG_SEV(LOG_NETWORK, debug) << "dtor BaseSession called";
 }
 
 void BaseSession::Run() {

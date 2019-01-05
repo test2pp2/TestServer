@@ -21,6 +21,9 @@
     <ClInclude Include="Server.hpp">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="ConstNetwork.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

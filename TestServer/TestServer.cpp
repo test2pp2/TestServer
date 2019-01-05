@@ -2,11 +2,14 @@
 //
 
 #include "stdafx.h"
-#include "Network/Server.h"
 #include "Content/Session.h"
 #include "Content/Packet.h"
+#include "Content/ConstContent.h"
 #include "Database/SqlConnector.h"
+#include "Network/ConstNetwork.h"
+#include "Network/Server.h"
 #include "Utils/Minidump.h"
+#include "Utils/Log.h"
 
 std::mutex lock;
 std::condition_variable cv;
@@ -33,7 +36,6 @@ bool CreateSqlConnection(
 }
 
 void InitalizeThreadLocal() {
-  int a = 20;
   std::cout << "called InitalizeThreadLocal" << std::endl;
   if (!CreateSqlConnection("127.0.0.1", 3306, "root", "aaaa1111", "test")) {
     assert(false);
@@ -41,92 +43,22 @@ void InitalizeThreadLocal() {
   std::cout << "successfully connect to sql server" << std::endl;
 }
 
-//#define UNUSED_REFERENCE_PARAMETER(x) boost::ignore_unused(x)
-
 void SignalCallback(int value) {
   boost::ignore_unused(value);
   stop = true;
   cv.notify_all();
 }
 
-class MyObject {
-public:
-  bool mIsOpened = true;
-};
-
-BOOST_LOG_ATTRIBUTE_KEYWORD(a_channel, "Channel", std::string)
-
-static void InitializeLog() {
-  boost::log::add_common_attributes();
-  boost::log::core::get()->add_global_attribute("Scope",
-    boost::log::attributes::named_scope());
-  boost::log::core::get()->set_filter(
-    boost::log::trivial::severity >= boost::log::trivial::trace
-  );
-
-  /* log formatter:
-  * [TimeStamp] [ThreadId] [Severity Level] [Scope] Log message
-  */
-  auto fmtTimeStamp = boost::log::expressions::
-    format_date_time<boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d %H:%M:%S.%f");
-  auto fmtThreadId = boost::log::expressions::
-    attr<boost::log::attributes::current_thread_id::value_type>("ThreadID");
-  auto fmtSeverity = boost::log::expressions::
-    attr<boost::log::trivial::severity_level>("Severity");
-  auto fmtScope = boost::log::expressions::format_named_scope("Scope",
-    boost::log::keywords::format = "%n(%f:%l)",
-    boost::log::keywords::iteration = boost::log::expressions::reverse,
-    boost::log::keywords::depth = 2);
-
-  boost::log::formatter logFmt =
-    boost::log::expressions::format("[%1%] (%2%) [%3%] [%4%] %5%")
-    % fmtTimeStamp % fmtThreadId % fmtSeverity % fmtScope
-    % boost::log::expressions::smessage;
-
-  /* console sink */
-  auto consoleSink = boost::log::add_console_log();
-  consoleSink->set_formatter(logFmt);
-
-  /* fs sink */
-  auto fsSink = boost::log::add_file_log(
-    boost::log::keywords::file_name = "Log/Content/A_%Y-%m-%d_%H-%M-%S.%N.log",
-    boost::log::keywords::rotation_size = 10 * 1024 * 1024,
-    boost::log::keywords::min_free_space = 30 * 1024 * 1024,
-    boost::log::keywords::open_mode = std::ios_base::app,
-    boost::log::keywords::filter = a_channel == "A"
-  );
-  fsSink->set_formatter(logFmt);
-  fsSink->locked_backend()->auto_flush(true);
-
-  auto fsSink2 = boost::log::add_file_log(
-    boost::log::keywords::file_name = "Log/Network/B_%Y-%m-%d_%H-%M-%S.%N.log",
-    boost::log::keywords::rotation_size = 10 * 1024 * 1024,
-    boost::log::keywords::min_free_space = 30 * 1024 * 1024,
-    boost::log::keywords::open_mode = std::ios_base::app,
-    boost::log::keywords::filter  = a_channel == "B"
-  );
-  fsSink2->set_formatter(logFmt);
-  fsSink2->locked_backend()->auto_flush(true);
-}
-
 int main() {
-  InitializeLog();
-  
-  using namespace boost::log::trivial;
-  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_a(boost::log::keywords::channel = "A");
-  boost::log::sources::severity_channel_logger_mt<severity_level, std::string> lg_b(boost::log::keywords::channel = "B");
+  Utils::InitializeLog();
+  Utils::AddFileLog(Network::LogNetwork);
+  Utils::AddFileLog(Content::LogContent);
 
-  BOOST_LOG_SEV(lg_a, debug) << "Connection a";  
-  BOOST_LOG_SEV(lg_b, debug) << "Connection b";
+  sources::severity_channel_logger_mt<severity_level, std::string> LOG(
+    keywords::channel = Content::LogContent
+  );
 
-  /*
-  BOOST_LOG_SEV(lg, trace) << "A trace severity message";
-  BOOST_LOG_SEV(lg, debug) << "A debug severity message";
-  BOOST_LOG_SEV(lg, info) << "An informational severity message";
-  BOOST_LOG_SEV(lg, warning) << "A warning severity message";
-  BOOST_LOG_SEV(lg, error) << "An error severity message";
-  BOOST_LOG_SEV(lg, fatal) << "A fatal severity message";
-  */
+  BOOST_LOG_SEV(LOG, trace) << "Start TestServer";
 
   Utils::Minidump dump;
   dump.Start();
@@ -140,7 +72,7 @@ int main() {
 
   const auto address = boost::asio::ip::make_address("127.0.0.1");
   const unsigned short port = 3000;
-  const auto thread_count = 2;
+  const auto thread_count = 4;
 
   Content::RegisterCallback();
 
@@ -153,6 +85,9 @@ int main() {
   for (auto i = 0; i < thread_count; ++i)
     thread_pool.emplace_back(
       [&io_context] {
+    
+    //std::thread::id this_id = std::this_thread::get_id();
+    //BOOST_LOG_SEV(LOG2, trace) << "Thread Id: " << this_id;
     InitalizeThreadLocal();
     std::cout << "run!" << std::endl;
     io_context.run();
@@ -174,5 +109,6 @@ int main() {
   }
 
   dump.End();
+  BOOST_LOG_SEV(LOG, trace) << "Finish TestServer";
   return EXIT_SUCCESS;
 }

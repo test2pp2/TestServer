@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "Session.h"
 #include "PacketHandler.h"
+#include "User.h"
 
 namespace Content {
 
-Session::Session(tcp::socket socket) : BaseSession(std::move(socket)), user_(nullptr) {
+Session::Session(tcp::socket socket) : BaseSession(std::move(socket)) {
 }
 
 Session::~Session() {
@@ -30,6 +31,10 @@ void Session::OnConnect() {
 }
  
 void Session::OnDisconnect() {
+  auto user = user_.lock();
+  if (user != nullptr) {
+    user->OnDisconnected();
+  }
   std::cout << "called OnDisconnect: " << std::endl;
 }
 
@@ -52,12 +57,12 @@ void Session::OnRecv(const std::string& buffer) {
   }
 }
 
-void Session::set_user(User* user) {
-  user_ = user;
-}
-
 void Session::Send(const JsonObject& json) {
   Write(json.dump());
+}
+
+void Session::set_user(std::shared_ptr<User> user) {
+  user_ = user;
 }
 
 }
